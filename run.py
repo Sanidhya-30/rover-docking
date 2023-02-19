@@ -35,7 +35,7 @@ cap = cv.VideoCapture(0)
 
 while True:
     _, src = cap.read()
-
+    src = cv.rotate(src, cv.ROTATE_90_CLOCKWISE)
     hsv = cv.cvtColor(src, cv.COLOR_BGR2HSV)
 
     # Define the range of red color in HSV
