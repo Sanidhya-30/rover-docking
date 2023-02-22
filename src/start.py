@@ -7,7 +7,7 @@ def mainStart(serial=None, connection=None):
         print(serial)
         rover = Rover(roverSerial=serial,connection=connection)
         # cleanArea(rover=rover)
-        dock()
+        dock(rover=rover)
 
 if __name__ == '__main__':
     pass

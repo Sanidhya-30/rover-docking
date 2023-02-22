@@ -1,4 +1,5 @@
 from pymavlink import mavutil
+from ..Camera import *
 import time
 
 class Rover:
@@ -18,6 +19,7 @@ class Rover:
         self.battery=system.battery_remaining
         self.vehicle=vehicle
         self.workingStatus=False
+        self.camera = Camera()
         self.droneSerial="ERROR000000000"
         self.droneStatus="Free"
         self.roverStatus="Free"
