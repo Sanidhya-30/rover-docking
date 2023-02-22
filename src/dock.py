@@ -24,7 +24,7 @@ def createDataMap(array):
         sd = np.std(val_list)
         for i in range(len(val_list)):
             z = (val_list[i] - mean) / sd
-            if z > 4:
+            if z > 0.5 or z < -0.5: # check minus 4
                 key = key_list[i]
                 outlier.append(key)
         return outlier
@@ -74,17 +74,21 @@ def dock():
                     data[0].remove(outliers[i][0])
                     data[1].remove(outliers[i][1])
 
+            for i in range(len(outliers)):
+                copy[outliers[i][1],outliers[i][0],0] = 0
+                copy[outliers[i][1],outliers[i][0],1] = 0
+                copy[outliers[i][1],outliers[i][0],2] = 0
+            
             # Calculate centroids
             if len(data[0]) > 0:
                 avg_x = int(round(np.average(data[0])))
                 avg_y = int(round(np.average(data[1])))
 
-                copy = cv.circle(color, (avg_x, avg_y),
+                copy = cv.circle(copy, (avg_x, avg_y),
                                 radius=10, color=(0, 255, 0), thickness=-1)
 
-        cv.imshow('masked', color)
         cv.imshow('Image', src)
-        cv.imshow('img', copy)
+        cv.imshow('copy', copy)
 
         if cv.waitKey(1) == ord('q'):
             break
