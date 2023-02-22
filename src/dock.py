@@ -1,6 +1,5 @@
 import cv2 as cv
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def createDataMap(array):
@@ -37,7 +36,7 @@ def dock():
     cap = cv.VideoCapture(0)
     while True:
         _, src = cap.read()
-        src = cv.rotate(src, cv.ROTATE_90_CLOCKWISE)
+
         hsv = cv.cvtColor(src, cv.COLOR_BGR2HSV)
 
         # Define the range of red color in HSV
@@ -57,66 +56,31 @@ def dock():
         color = cv.bitwise_and(src, src, mask=full_mask)
         val = np.nonzero(color)
         copy = np.copy(color)
-        left = [[], []]
-        right = [[], []]
-        right_avg_x = 0
-        right_avg_y = 0
-        left_avg_x = 0
-        left_avg_y = 0
+        avg_x = 0
+        avg_y = 0
         center_x = 0
         center_y = 0
 
-        x_axis = val[1]
-        y_axis = val[0]
-
+        x_axis = list(val[1])
+        y_axis = list(val[0])
+        data = [x_axis,y_axis]
         if len(x_axis) > 0:
 
-            # Differentiate between Left side and Right side
-            for i in range(len(x_axis)):
-
-                if val[1][i] > 240:
-                    right[0].append(x_axis[i])
-                    right[1].append(y_axis[i])
-                else:
-                    left[0].append(x_axis[i])
-                    left[1].append(y_axis[i])
-
             # Remove Outliers
-            right_outliers = createDataMap(right)
-            left_outliers = createDataMap(left)
+            outliers = createDataMap(data)
 
-            if right_outliers is not None:
-                for i in range(len(right_outliers)):
-                    right[0].remove(right_outliers[i][0])
-                    right[1].remove(right_outliers[i][1])
+            if outliers is not None:
+                for i in range(len(outliers)):
+                    data[0].remove(outliers[i][0])
+                    data[1].remove(outliers[i][1])
 
-            if left_outliers is not None:
-                for i in range(len(left_outliers)):
-                    left[0].remove(left_outliers[i][0])
-                    left[1].remove(left_outliers[i][1])
+            # Calculate centroids
+            if len(data[0]) > 0:
+                avg_x = int(round(np.average(data[0])))
+                avg_y = int(round(np.average(data[1])))
 
-            # Calculate centroids for Left side and Right side
-            if len(right[0]) > 0:
-                right_avg_x = int(round(np.average(right[0])))
-                right_avg_y = int(round(np.average(right[1])))
-
-                copy = cv.circle(color, (right_avg_x, right_avg_y),
+                copy = cv.circle(color, (avg_x, avg_y),
                                 radius=10, color=(0, 255, 0), thickness=-1)
-
-            if len(left[0]) > 0:
-                left_avg_x = int(round(np.average(left[0])))
-                left_avg_y = int(round(np.average(left[1])))
-
-                copy = cv.circle(copy, (left_avg_x, left_avg_y),
-                                radius=10, color=(0, 255, 0), thickness=-1)
-
-            # Find center point of the line
-            if ((right_avg_x != 0) and (left_avg_x != 0)):
-                center_x = int((right_avg_x + left_avg_x) / 2)
-                center_y = int((right_avg_y + left_avg_y) / 2)
-                if ((center_x > 0) and (center_y)):
-                    copy = cv.circle(copy, (center_x, center_y),
-                                    radius=10, color=(255, 0, 0), thickness=-1)
 
         cv.imshow('masked', color)
         cv.imshow('Image', src)
