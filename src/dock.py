@@ -24,7 +24,7 @@ def createDataMap(array):
         sd = np.std(val_list)
         for i in range(len(val_list)):
             z = (val_list[i] - mean) / sd
-            if z > 0.5 or z < -0.5: # check minus 4
+            if z > 0.5 or z < -0.5:
                 key = key_list[i]
                 outlier.append(key)
         return outlier
@@ -58,8 +58,6 @@ def dock():
         copy = np.copy(color)
         avg_x = 0
         avg_y = 0
-        center_x = 0
-        center_y = 0
 
         x_axis = list(val[1])
         y_axis = list(val[0])
