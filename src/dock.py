@@ -23,14 +23,17 @@ def dock(rover):
     while True:
         
         dock_x, masked_image, src_image = rover.camera.capture()
-        cv2.imshow('mask', masked_image)
+        src_image = cv2.rotate(src_image, cv2.ROTATE_90_CLOCKWISE)
+        cv2.imshow('mask', src_image)
         cv2.waitKey(1)
-        print('docking')
-
+        #print('docking')
         FrameCenter = src_image.shape[1]/2
         drift = (dock_x-FrameCenter)
         # determine K
         K = 1
+        print(FrameCenter)
+        print(dock_x)
+
 
         if (drift) > 25:
             cv2.putText(masked_image, "Move Right", (50, 50), label_font, 0.5, (255, 0, 0), 2)
@@ -45,7 +48,7 @@ def dock(rover):
         elif -25 < (drift) < 25 :
             cv2.putText(masked_image, "Move Left", (50, 50), label_font, 0.5, (255, 0, 0), 2)
             coverForwardArea(rover,spd=2)
-            print("Moving Left by",drift)
+            print("Docking")
 
 
 if __name__ == '__main__':
