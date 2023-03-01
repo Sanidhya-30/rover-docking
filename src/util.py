@@ -1,4 +1,7 @@
 import numpy as np
+import sys
+import os
+
 
 def createDataMap(array):
     outlier = []
@@ -26,3 +29,10 @@ def createDataMap(array):
                 key = key_list[i]
                 outlier.append(key)
         return outlier
+    
+def keyboard_shutdown():
+    print('Interrupted\n')
+    try:
+        sys.exit(0)
+    except SystemExit:
+        os._exit(0)

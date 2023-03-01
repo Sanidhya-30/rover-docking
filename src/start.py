@@ -6,7 +6,6 @@ def mainStart(serial=None, connection=None):
     if serial != None:
         print(serial)
         rover = Rover(roverSerial=serial,connection=connection)
-        # cleanArea(rover=rover)
         dock(rover=rover)
 
 if __name__ == '__main__':

@@ -4,7 +4,7 @@ from ..util import createDataMap
 
 class Camera:
     def __init__(self):
-        self.cap = cv2.VideoCapture('/home/akshat/Desktop/flynovate/docking/test.mp4')
+        self.cap = cv2.VideoCapture(0)
 
     def capture(self):
         _, src = self.cap.read()
@@ -44,10 +44,10 @@ class Camera:
                     data[0].remove(outliers[i][0])
                     data[1].remove(outliers[i][1])
 
-            for i in range(len(outliers)):
-                copy[outliers[i][1],outliers[i][0],0] = 0
-                copy[outliers[i][1],outliers[i][0],1] = 0
-                copy[outliers[i][1],outliers[i][0],2] = 0
+                for i in range(len(outliers)):
+                    copy[outliers[i][1],outliers[i][0],0] = 0
+                    copy[outliers[i][1],outliers[i][0],1] = 0
+                    copy[outliers[i][1],outliers[i][0],2] = 0
             
             # Calculate centroids
             if len(data[0]) > 0:
@@ -57,7 +57,7 @@ class Camera:
                 copy = cv2.circle(copy, (avg_x, avg_y),
                                 radius=10, color=(0, 255, 0), thickness=-1)
                 
-        return avg_x, avg_y, copy, src
+        return avg_x, copy, src
     
 if __name__== "__main__":
     pass
