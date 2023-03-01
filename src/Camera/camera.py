@@ -4,7 +4,7 @@ from ..util import createDataMap
 
 class Camera:
     def __init__(self):
-        self.cap = cv2.VideoCapture('/home/akshat/Desktop/flynovate/docking/test.mp4')
+        self.cap = cv2.VideoCapture(0)
 
     def capture(self):
         _, src = self.cap.read()
