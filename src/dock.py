@@ -22,7 +22,7 @@ def moveB_L(rover, spd, d):
 def changeDirection(rover, angle):
         rover.changeYaw(angle=angle,speed=0.02)
 
-def Align(rover, change):
+def align(rover, change):
     changeDirection(rover, angle=90)
     moveF_L(rover, spd=2, d=change)
     changeDirection(rover, angle=90)
@@ -37,46 +37,77 @@ def dock(rover):
         
         dock_x, masked_image= rover.camera.capture()
         #src_image = cv2.rotate(src_image, cv2.ROTATE_90_CLOCKWISE)
+        masked_image = cv2.rotate(masked_image, cv2.ROTATE_180)
         #cv2.imshow('OG', src_image)
-        cv2.imshow('masked', masked_image)
-        cv2.waitKey(1)
-
-        print("Yaw +90")
-        changeDirection(rover, angle=90)
-
-        FrameCenter = masked_image.shape[1]/2
-        drift = (dock_x-FrameCenter)
-    # After Testing determine K
-        K = 1
-
-        print(FrameCenter)
-        print(dock_x)
-
-        if drift is not 0:
+        FrameCenter_X = round(masked_image.shape[1]/2)
+        FrameCenter_Y = round(masked_image.shape[0]/2)
+        masked_image = cv2.circle(masked_image, (FrameCenter_X, FrameCenter_Y), radius=10, color=(255, 0, 0), thickness=-1)
+        drift = (dock_x-FrameCenter_X)
+        print('drift', drift)
+        K=1
+        
+        if drift is not None:
             
             if (drift) > 25:
-                #cv2.putText(masked_image, "Move Right", (50, 50), label_font, 0.5, (255, 0, 0), 2)
-                Align(rover, K*drift)
-                print("Moving Right by",K*drift)
-                time.sleep(1)
+                cv2.putText(masked_image, "Move Left", (50, 50), label_font, 0.5, (255, 0, 0), 2)
+                align(rover, K*drift)
+                #print("Moving Right by",K*drift)
 
             elif (drift) < -25:
-                #cv2.putText(masked_image, "Move Left", (50, 50), label_font, 0.5, (255, 0, 0), 2)
-                Align(rover, K*drift)
-                print("Moving Left by",K*drift)
-                time.sleep(1)
+                cv2.putText(masked_image, "Move Right", (50, 50), label_font, 0.5, (255, 0, 0), 2)
+                align(rover, K*drift)
+                #print("Moving Left by",K*drift)
 
             elif -25 < (drift) < 25 :
-                #cv2.putText(masked_image, "Move Left", (50, 50), label_font, 0.5, (255, 0, 0), 2)
+                cv2.putText(masked_image, "Move Forward", (50, 50), label_font, 0.5, (255, 0, 0), 2)
                 moveF(rover,spd=2)
-                print("Docking")
-                time.sleep(1)
+                #print("Docking")
         
         else:
             print("Drone not detected")
             changeDirection(rover, angle=90)
             moveF_L(rover, spd=2, d=length)
             changeDirection(rover, angle=-90)
+        
+        cv2.imshow('masked', masked_image)
+        cv2.waitKey(1)
+
+        #print("Yaw +90")
+        #changeDirection(rover, angle=90)
+
+        #FrameCenter = masked_image.shape[1]/2
+        #drift = (dock_x-FrameCenter)
+    # After Testing determine K
+        #K = 1
+
+        #print(FrameCenter)
+        #print(dock_x)
+
+        #if drift is not 0:
+            
+        #    if (drift) > 25:
+        #        #cv2.putText(masked_image, "Move Right", (50, 50), label_font, 0.5, (255, 0, 0), 2)
+        #        align(rover, K*drift)
+        #        print("Moving Right by",K*drift)
+        #        time.sleep(1)
+
+        #    elif (drift) < -25:
+        #        #cv2.putText(masked_image, "Move Left", (50, 50), label_font, 0.5, (255, 0, 0), 2)
+        #        align(rover, K*drift)
+        #        print("Moving Left by",K*drift)
+        #        time.sleep(1)
+
+        #    elif -25 < (drift) < 25 :
+        #        #cv2.putText(masked_image, "Move Left", (50, 50), label_font, 0.5, (255, 0, 0), 2)
+        #        moveF(rover,spd=2)
+        #        print("Docking")
+        #        time.sleep(1)
+        
+        #else:
+        #    print("Drone not detected")
+        #    changeDirection(rover, angle=90)
+        #    moveF_L(rover, spd=2, d=length)
+        #    changeDirection(rover, angle=-90)
             # Checks odometry
 
 
