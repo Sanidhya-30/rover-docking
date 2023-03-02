@@ -5,6 +5,7 @@ from ..util import createDataMap
 class Camera:
     def __init__(self):
         self.cap = cv2.VideoCapture(0)
+        # check/change parameter before testing
 
     def capture(self):
         _, src = self.cap.read()
@@ -57,7 +58,7 @@ class Camera:
                 copy = cv2.circle(copy, (avg_x, avg_y),
                                 radius=10, color=(0, 255, 0), thickness=-1)
                 
-        return avg_x, copy, src
+        return avg_x, avg_y, copy, src
     
 if __name__== "__main__":
     pass
