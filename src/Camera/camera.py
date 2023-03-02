@@ -4,7 +4,7 @@ from ..util import createDataMap
 
 class Camera:
     def __init__(self):
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(1)
         # check/change parameter before testing
 
     def capture(self):
@@ -35,6 +35,7 @@ class Camera:
         x_axis = list(val[1])
         y_axis = list(val[0])
         data = [x_axis,y_axis]
+        
         if len(x_axis) > 0:
 
             # Remove Outliers
@@ -58,7 +59,7 @@ class Camera:
                 copy = cv2.circle(copy, (avg_x, avg_y),
                                 radius=10, color=(0, 255, 0), thickness=-1)
                 
-        return avg_x, avg_y, copy, src
+        return avg_x, copy
     
 if __name__== "__main__":
     pass
