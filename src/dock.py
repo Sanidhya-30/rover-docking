@@ -25,7 +25,7 @@ def changeDirection(rover, angle):
 def align(rover, change):
     changeDirection(rover, angle=-90)
     moveF_L(rover, spd=2, d=change)
-    changeDirection(rover, angle=90)
+    changeDirection(rover, angle=-90)
 
 
 
@@ -37,8 +37,7 @@ def dock(rover):
    
     while True:
         
-        dock_x, masked_image= rover.camera.capture()
-        #src_image = cv2.rotate(src_image, cv2.ROTATE_90_CLOCKWISE)
+        dock_x, masked_image = rover.camera.capture()
         masked_image = cv2.rotate(masked_image, cv2.ROTATE_180)
         #cv2.imshow('OG', src_image)
         FrameCenter_X = round(masked_image.shape[1]/2)
@@ -47,7 +46,6 @@ def dock(rover):
         drift = (dock_x-FrameCenter_X)
         # print('drift', drift)
         K=1
-        rover.moveForward(speed=3)
         
         if dock_x is not 0:
             

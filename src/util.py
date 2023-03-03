@@ -27,8 +27,11 @@ def createDataMap(array):
             z = (val_list[i] - mean) / sd
             if z > 0.5 or z < -0.5:
                 key = key_list[i]
-                outlier.append(key)
-        return outlier
+                array[0].remove(key[0])
+                array[1].remove(key[1])
+                #print(key[0])
+                #outlier.append(key)
+        #return outlier
     
 def keyboard_shutdown():
     print('Interrupted\n')
