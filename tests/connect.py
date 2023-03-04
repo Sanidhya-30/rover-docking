@@ -39,7 +39,7 @@ while 1:
       time.sleep(1)
       pos = the_connection.recv_match(type='GPS_RAW_INT', blocking=True)
       print(system.yaw)
-      print('in deg', math.degrees(system.yaw))
+      print('in deg', math.degrees(abs(system.yaw)))
       #print(pos)
       # data = the_connection.messages['HOME']
       time.sleep(2)

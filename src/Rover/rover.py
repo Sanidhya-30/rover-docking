@@ -1,6 +1,7 @@
 from pymavlink import mavutil
 from ..Camera import *
 import time
+import math
 
 class Rover:
     def __init__(self,roverSerial,connection):
@@ -19,7 +20,7 @@ class Rover:
         self.battery=system.battery_remaining
         self.vehicle=vehicle
         self.workingStatus=False
-        self.camera = Camera()
+        # self.camera = Camera()
         self.droneSerial="ERROR000000000"
         self.droneStatus="Free"
         self.roverStatus="Free"
@@ -52,6 +53,16 @@ class Rover:
 		0,
 		0,0, 0)
 
+        self.vehicle.mav.command_long_encode(
+		0, 0,
+		mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE,
+		0,
+		30,
+		0,
+		0,
+		0,
+		0,0, 0)
+
     def moveForward(self, speed):
         self.vehicle.mav.send(mavutil.mavlink.MAVLink_set_position_target_local_ned_message(10, self.vehicle.target_system,
                         self.vehicle.target_component, mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED, int(0b110111000111), 0, 0, 0, speed, 0, 0, 0, 0, 0, 0, 0))
@@ -69,8 +80,25 @@ class Rover:
                         self.vehicle.target_component, mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED, int(0b11011100110), d, 0, 0, -(speed), 0, 0, 0, 0, 0, 0, 0))
 
     def changeYaw(self, angle, speed=0):
+
+        system = self.vehicle.recv_match(type='ATTITUDE', blocking=True)
+        print(angle)
+        initial = math.degrees(system.yaw)
+        current = initial
         self.vehicle.mav.send(mavutil.mavlink.MAVLink_set_position_target_local_ned_message(10, self.vehicle.target_system,
                         self.vehicle.target_component, mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED , int(0b100111100111), 0, 0, 0, (speed), 0, 0, 0, 0, 0, angle, 0))
+        
+        while True:
+            change = abs(abs(initial) - abs(current))
+            if change >= 90:
+                break
+            self.vehicle.mav.send(mavutil.mavlink.MAVLink_set_position_target_local_ned_message(10, self.vehicle.target_system,
+                        self.vehicle.target_component, mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED , int(0b100111100111), 0, 0, 0, (speed), 0, 0, 0, 0, 0, angle, 0))
+            system = self.vehicle.recv_match(type='ATTITUDE', blocking=True)
+            current = math.degrees(system.yaw)
+            print('current head', current)
+            print('change head',change)
+            
 
 if __name__== "__main__":
     pass
