@@ -1,6 +1,7 @@
 from pymavlink import mavutil
 import argparse
 import time
+import math
 parser = argparse.ArgumentParser()
 parser.add_argument('--connect', default='127.0.0.1:14550')
 args = parser.parse_args()
@@ -37,7 +38,8 @@ while 1:
       
       time.sleep(1)
       pos = the_connection.recv_match(type='GPS_RAW_INT', blocking=True)
-      # print(system.yaw)
-      print(pos)
+      print(system.yaw)
+      print('in deg', math.degrees(system.yaw))
+      #print(pos)
       # data = the_connection.messages['HOME']
       time.sleep(2)
