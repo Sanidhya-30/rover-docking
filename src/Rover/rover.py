@@ -72,8 +72,25 @@ class Rover:
                         self.vehicle.target_component, mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED, int(0b11011100111), 0, 0, 0, -(speed), 0, 0, 0, 0, 0, 0, 0))
     
     def moveForward_L(self, speed, d=0):
+        system = self.vehicle.recv_match(type='LOCAL_POSITION_NED', blocking=True)
+
+        initial = system.x
+        current = initial
         self.vehicle.mav.send(mavutil.mavlink.MAVLink_set_position_target_local_ned_message(10, self.vehicle.target_system,
                         self.vehicle.target_component, mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED, int(0b110111000110), d, 0, 0, speed, 0, 0, 0, 0, 0, 0, 0))
+        
+        while True:
+            change = abs(abs(initial) - abs(current))
+            if change >= 5:
+                break
+            self.vehicle.mav.send(mavutil.mavlink.MAVLink_set_position_target_local_ned_message(10, self.vehicle.target_system,
+                        self.vehicle.target_component, mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED, int(0b110111000110), d, 0, 0, speed, 0, 0, 0, 0, 0, 0, 0))
+            system = self.vehicle.recv_match(type='LOCAL_POSITION_NED', blocking=True)
+            current = system.x
+            print('current head', current)
+            print('change head',change)
+            
+        
 
     def moveBackward_L(self, speed, d=0):
         self.vehicle.mav.send(mavutil.mavlink.MAVLink_set_position_target_local_ned_message(10, self.vehicle.target_system,

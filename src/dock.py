@@ -37,7 +37,7 @@ def dock(rover:Rover):
     rover.changeVehicleMode('GUIDED')
     rover.changeYaw(angle=math.radians(90), speed=0.1)
     # print('Done!!!!!')
-    moveF_L(rover, spd=2, d=2)
+    moveF_L(rover, spd=0.2, d=2)
     rover.changeYaw(angle=-math.radians(90), speed=0.1)
     print('Done!!!!!')
    

@@ -33,13 +33,13 @@ while 1:
       system = the_connection.recv_match(type='ATTITUDE', blocking=True)
       # print(data)
       
-      the_connection.mav.send(mavutil.mavlink.MAVLink_set_position_target_local_ned_message(10, the_connection.target_system,
-                        the_connection.target_component, mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED , int(0b100111100111), 0, 0, 0, 0.2, 0, 0, 0, 0, 0, 0.8, 0))
+      # the_connection.mav.send(mavutil.mavlink.MAVLink_set_position_target_local_ned_message(10, the_connection.target_system,
+      #                   the_connection.target_component, mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED , int(0b100111100111), 0, 0, 0, 0.2, 0, 0, 0, 0, 0, 0.8, 0))
       
       time.sleep(1)
-      pos = the_connection.recv_match(type='GPS_RAW_INT', blocking=True)
+      pos = the_connection.recv_match(type='LOCAL_POSITION_NED', blocking=True)
       print(system.yaw)
       print('in deg', math.degrees(abs(system.yaw)))
-      #print(pos)
+      print(pos)
       # data = the_connection.messages['HOME']
       time.sleep(2)
