@@ -23,9 +23,9 @@ def changeDirection(rover, angle):
     rover.changeYaw(angle=angle,speed=0.02)
 
 def align(rover, change):
-    changeDirection(rover, angle=-90)
+    rover.changeYaw(angle=90, speed=0.02)
     moveF_L(rover, spd=2, d=change)
-    changeDirection(rover, angle=-90)
+    rover.changeYaw(angle=-90, speed=0.02)
 
 
 
@@ -63,9 +63,6 @@ def dock(rover):
         
         else:
             print("Drone not detected")
-            # changeDirection(rover, angle=90)
-            # moveF_L(rover, spd=2, d=length)
-            # changeDirection(rover, angle=-90)
         
         cv2.imshow('masked', masked_image)
         cv2.waitKey(1)

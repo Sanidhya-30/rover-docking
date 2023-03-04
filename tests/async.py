@@ -1,6 +1,10 @@
 from pymavlink import mavutil
 import argparse
-from ..src.Rover import *
+
+import sys
+sys.path.append("..")
+
+from src.Rover import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--connect', default='127.0.0.1:14550')
@@ -15,9 +19,9 @@ rover.changeVehicleMode('GUIDED')
 
 def align(rover):
     print('Aligning')
-    rover.changeYaw(angle=90,speed=0.02)
+    rover.changeYaw(angle=0.8,speed=0.02)
     rover.moveForward_L(speed=2,d=2)
-    rover.changeYaw(angle=-90,speed=0.02)
+    rover.changeYaw(angle=-0.8,speed=0.02)
     print('Done Aligning')
 
 def dock():
@@ -36,11 +40,11 @@ def dock():
             print('Looping.....')
             if (drift) > 25:
                 cv2.putText(masked_image, "Move Left", (50, 50), label_font, 0.5, (255, 0, 0), 2)
-                align(rover, (K*drift))
+                align(rover)
 
             elif (drift) < -25:
                 cv2.putText(masked_image, "Move Right", (50, 50), label_font, 0.5, (255, 0, 0), 2)
-                align(rover, (-K*drift))
+                align(rover)
 
             elif -25 < (drift) < 25 :
                 cv2.putText(masked_image, "Move Forward", (50, 50), label_font, 0.5, (255, 0, 0), 2)
@@ -52,4 +56,5 @@ def dock():
         cv2.imshow('masked', masked_image)
         cv2.waitKey(1)
 
-dock()
+if __name__ == '__main__':    
+    dock()
