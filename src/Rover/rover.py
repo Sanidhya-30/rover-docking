@@ -99,7 +99,7 @@ class Rover:
     def changeYaw(self, angle, speed=0):
 
         system = self.vehicle.recv_match(type='ATTITUDE', blocking=True)
-        print(angle)
+        print(angle) # Correct angle by adding abs difference in 180 degrees
         initial = math.degrees(system.yaw)
         current = initial
         self.vehicle.mav.send(mavutil.mavlink.MAVLink_set_position_target_local_ned_message(10, self.vehicle.target_system,
