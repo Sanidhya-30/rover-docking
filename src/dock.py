@@ -24,9 +24,9 @@ def changeDirection(rover:Rover, angle):
     rover.changeYaw(angle=angle,speed=0.02)
 
 def align(rover:Rover, change):
-    rover.changeYaw(angle=math.radians(90), speed=0.02)
-    moveF_L(rover, spd=2, d=change)
-    rover.changeYaw(angle=-math.radians(90), speed=0.02)
+    rover.changeYaw(angle=math.radians(90), speed=0.1)
+    moveF_L(rover, spd=0.2, d=2)
+    rover.changeYaw(angle=-math.radians(90), speed=0.1)
 
 
 
