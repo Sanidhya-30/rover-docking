@@ -35,11 +35,16 @@ def dock(rover:Rover):
     label_font = cv2.FONT_HERSHEY_SIMPLEX
     rover.setupAndArm()
     rover.changeVehicleMode('GUIDED')
-    rover.changeYaw(angle=math.radians(90), speed=0.1)
+    drift_counter = {
+        'L': 0,
+        'R': 0,
+        'F': 0
+        }
+    #rover.changeYaw(angle=math.radians(90), speed=0.1)
     # print('Done!!!!!')
-    moveF_L(rover, spd=0.2, d=2)
-    rover.changeYaw(angle=-math.radians(90), speed=0.1)
-    print('Done!!!!!')
+    #moveF_L(rover, spd=0.2, d=2)
+    #rover.changeYaw(angle=-math.radians(90), speed=0.1)
+    #print('Done!!!!!')
    
     while True:
         
@@ -57,15 +62,24 @@ def dock(rover:Rover):
             
             if (drift) > 25:
                 cv2.putText(masked_image, "Move Left", (50, 50), label_font, 0.5, (255, 0, 0), 2)
-                align(rover, (K*drift))
+                drift_counter['L'] = drift_counter['L'] + 1
+                if drift_counter['L'] > 5:
+                    drift_counter['L'] = 0
+                    align(rover, (K*drift))
 
             elif (drift) < -25:
                 cv2.putText(masked_image, "Move Right", (50, 50), label_font, 0.5, (255, 0, 0), 2)
-                align(rover, (-K*drift))
+                drift_counter['R'] = drift_counter['R'] + 1
+                if drift_counter['R'] > 5:
+                    drift_counter['R'] = 0
+                    align(rover, (-K*drift))
 
             elif -25 < (drift) < 25 :
                 cv2.putText(masked_image, "Move Forward", (50, 50), label_font, 0.5, (255, 0, 0), 2)
-                moveF(rover,spd=2)
+                drift_counter['F'] = drift_counter['F'] + 1
+                if drift_counter['F'] > 5:
+                    drift_counter['F'] = 0
+                    moveF(rover,spd=2)
         
         else:
             print("Drone not detected")
