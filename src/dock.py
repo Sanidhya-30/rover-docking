@@ -8,27 +8,10 @@ from .Rover import *
 length = 45
 breadth = 30
 
-def moveF(rover:Rover, spd):
-    rover.moveForward(speed=spd)
-
-def moveB(rover:Rover, spd):
-    rover.moveForward(speed=spd)
-
-def moveF_L(rover:Rover, spd, d):
-    rover.moveForward_L(speed=spd,d=d)
-
-def moveB_L(rover:Rover, spd, d):
-    rover.moveBackward_L(speed=spd,d=d)
-
-def changeDirection(rover:Rover, angle):
-    rover.changeYaw(angle=angle,speed=0.02)
-
 def align(rover:Rover, change):
     rover.changeYaw(angle=math.radians(90), speed=0.1)
-    moveF_L(rover, spd=0.2, d=2)
+    rover.moveForward_L(speed=0.2,d=2)
     rover.changeYaw(angle=-math.radians(90), speed=0.1)
-
-
 
 def dock(rover:Rover):
     
@@ -40,11 +23,6 @@ def dock(rover:Rover):
         'R': 0,
         'F': 0
         }
-    #rover.changeYaw(angle=math.radians(90), speed=0.1)
-    # print('Done!!!!!')
-    #moveF_L(rover, spd=0.2, d=2)
-    #rover.changeYaw(angle=-math.radians(90), speed=0.1)
-    #print('Done!!!!!')
    
     while True:
         
@@ -79,7 +57,7 @@ def dock(rover:Rover):
                 drift_counter['F'] = drift_counter['F'] + 1
                 if drift_counter['F'] > 5:
                     drift_counter['F'] = 0
-                    moveF(rover,spd=2)
+                    rover.moveForward(speed=2)
         
         else:
             print("Drone not detected")

@@ -37,9 +37,8 @@ while 1:
       #                   the_connection.target_component, mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED , int(0b100111100111), 0, 0, 0, 0.2, 0, 0, 0, 0, 0, 0.8, 0))
       
       time.sleep(1)
-      pos = the_connection.recv_match(type='LOCAL_POSITION_NED', blocking=True)
-      print(system.yaw)
-      print('in deg', math.degrees(abs(system.yaw)))
+      pos = the_connection.recv_match(type='HWSTATUS', blocking=True)
+      # print(dir(the_connection.base_mode))
       print(pos)
-      # data = the_connection.messages['HOME']
-      time.sleep(2)
+      print(data)
+      print('done')
