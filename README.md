@@ -26,7 +26,7 @@ source ~/{name_of_workspace}/devel/setup.bash
 
 ## Demo Video
 
-![demo video]([https://github.com/Sanidhya-30/rover-docking/blob/main/rover_dock.gif](https://github.com/Sanidhya-30/rover-docking?tab=readme-ov-file#demo-video))
+![demo video](https://www.youtube.com/watch?v=X0h3elKJ1Yw)
 
 
 ## Prerequisites
